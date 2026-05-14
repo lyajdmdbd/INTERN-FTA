@@ -1,0 +1,407 @@
+@import url('https://fonts.googleapis.com/css?family=Inter:wght@400;600;700;800&display=swap');
+
+/* --- RESET & BASE --- */
+* { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { margin: 0; background-color: #f8fafc; color: #1e293b; line-height: 1.5; }
+
+/* --- HEADER / HERO --- */
+.hero { background-color: #0f172a; color: white; padding: 25px 50px; border-bottom: 5px solid #f97316; }
+.header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
+.hero h1 { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: 1px; }
+.hero p { margin: 5px 0 0; font-size: 12px; color: #94a3b8; }
+
+.date-input { padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: white; cursor: pointer; }
+.btn-primary { background: #f97316; color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.2); }
+.btn-primary:hover { transform: translateY(-2px); background: #ea580c; }
+
+/* --- MAIN LAYOUT --- */
+.main-layout {
+    display: flex;
+    flex-wrap: wrap; /* Ini wajib ada supaya mobile view jadi */
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px;
+}
+.content-left { flex: 1; }
+
+.sidebar-right {
+    background-color: #0f172a !important; 
+    color: #ffffff !important;
+    width: 380px !important; /* Kita up sikit ke 380px supaya tak sesak */
+    padding: 25px;
+    border-radius: 16px;
+    position: sticky;
+    top: 30px;
+    height: fit-content;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2); /* Tambah shadow sikit bagi nampak mahal */
+}
+.lvl-header { font-size: 11px; color: #94a3b8; font-weight: 800; margin: 15px 0 10px; letter-spacing: 1px; text-transform: uppercase; }
+.side-room-item { background: #1e293b; padding: 12px 15px; border-radius: 10px; font-size: 13px; font-weight: 600; margin-bottom: 8px; border-left: 3px solid #22c55e; }
+
+/* --- ROOM GRID & CARDS --- */
+.room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.room-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s; }
+.room-card.busy { background: #fff7ed; }
+.status-pill { font-size: 10px; padding: 4px 10px; border-radius: 6px; font-weight: 800; }
+.status-pill.empty { background: #f0fdf4; color: #15803d; }
+.status-pill.booked { background: #ffedd5; color: #c2410c; }
+
+/* --- MODAL STYLING (BIAR TAK HODOH) --- */
+.modal-overlay {
+    display: none; 
+    position: fixed; 
+    inset: 0; 
+    background: rgba(15, 23, 42, 0.7); 
+    backdrop-filter: blur(4px); 
+    align-items: center; 
+    justify-content: center; 
+    z-index: 9999; 
+    padding: 20px;
+}
+
+.modal-content {
+    background: white; 
+    padding: 30px; 
+    border-radius: 20px; 
+    width: 100%; 
+    max-width: 550px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.modal-header h2 { margin: 0; font-size: 22px; font-weight: 800; }
+.close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #94a3b8; }
+
+/* --- FORM STYLING --- */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #475569; }
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px;
+    font-size: 14px; background: #f8fafc; transition: 0.2s;
+}
+.form-group input:focus { outline: none; border-color: #3b82f6; background: white; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+.modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
+.btn-save { background: #f97316; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+.btn-secondary { background: #f1f5f9; color: #64748b; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+
+/* --- UTILITIES --- */
+.ongoing-label { color: #f97316; font-weight: 800; font-size: 10px; display: block; margin-top: 5px; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+/* --- REPLIT STYLE DETAILS (DALAM CARD ATAS) --- */
+.card-details-container {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 12px;
+}
+
+.mini-session-row {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 10px;
+    border-left: 4px solid #f97316;
+    transition: transform 0.2s ease;
+}
+
+.mini-session-row:hover {
+    transform: translateX(5px); /* Ada effect bila hover mouse */
+    background: #f1f5f9;
+}
+
+.mini-time {
+    font-size: 11px;
+    font-weight: 800;
+    color: #f97316;
+    display: block;
+}
+
+.mini-teacher {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+    text-transform: uppercase;
+}
+
+.mini-details {
+    font-size: 10px;
+    color: #64748b;
+    margin-top: 4px;
+}
+
+.mini-purpose {
+    display: inline-block !important;
+    min-width: 65px !important;
+    text-align: center !important;
+    margin-right: 8px !important; /* Up sikit jarak bagi nampak kemas */
+    padding: 3px 10px !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    border-radius: 6px !important; /* Bulatkan sikit lagi bagi nampak moden */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important; /* Border halus */
+}
+
+/* --- Warna dengan Soft Glow --- */
+.purpose-bg-pcc { 
+    background-color: #b39ddb !important; 
+    color: #2e1065 !important;
+    box-shadow: 0 0 10px rgba(179, 157, 219, 0.4); 
+}
+.purpose-bg-po { 
+    background-color: #a5d6a7 !important; 
+    color: #064e3b !important;
+    box-shadow: 0 0 10px rgba(165, 214, 167, 0.4);
+}
+.purpose-bg-center { 
+    background-color: #90caf9 !important; 
+    color: #1e3a8a !important;
+    box-shadow: 0 0 10px rgba(144, 202, 249, 0.4);
+}
+.purpose-bg-og { 
+    background-color: #ffcc80 !important; 
+    color: #78350f !important;
+    box-shadow: 0 0 10px rgba(255, 204, 128, 0.4);
+}
+.purpose-bg-meeting { 
+    background-color: #f48fb1 !important; 
+    color: #880e4f !important;
+    box-shadow: 0 0 10px rgba(244, 143, 177, 0.4);
+}
+/* --- ULTIMATE MOBILE VIEW (FIXED COLORS & LAYOUT) --- */
+@media (max-width: 992px) { 
+    .header-container {
+        flex-direction: column !important;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .main-layout {
+        display: flex !important;
+        flex-direction: column !important; /* Paksa susun menegak */
+        padding: 15px !important;
+    }
+
+    /* 3. Sidebar: FIX BACKGROUND & TEXT VISIBILITY */
+    .sidebar-right {
+        background-color: #0f172a !important; /* Paksa Biru Gelap Hero */
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+        position: static !important;
+        order: -1 !important;
+        margin-bottom: 25px !important;
+        padding: 20px !important;
+        border-radius: 12px !important;
+        display: block !important; /* Pastikan dia tak ghaib */
+    }
+
+    /* Paksa semua text dalam sidebar (termasuk Bilik Kosong) jadi putih */
+    .sidebar-right h2, 
+    .sidebar-right h3, 
+    .sidebar-right label, 
+    .sidebar-right p,
+    .sidebar-right .current-day,
+    .sidebar-right div {
+        color: #ffffff !important;
+        opacity: 1 !important; /* Pastikan tak transparent */
+    }
+
+    .rooms-grid {
+        width: 100% !important;
+        grid-template-columns: 1fr !important;
+        order: 1 !important;
+    }
+
+    .booking-card {
+        flex-direction: column !important;
+        padding: 15px !important;
+    }
+
+    .time-column {
+        width: 100% !important;
+        border-right: none !important;
+        border-bottom: 2px solid #f1f5f9 !important;
+        padding: 0 0 10px 0 !important;
+        margin-bottom: 10px !important;
+    }
+}
+/* --- FIX: SEDANG GUNA FLOATING & GLOWING --- */
+
+/* 1. Hilangkan kotak background */
+.ongoing-status-badge {
+    background: transparent !important; /* Buang kotak merah cair */
+    border: none !important;            /* Buang border */
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 0 !important;
+}
+
+/* 2. Teks Sedang Guna jadi merah menyala */
+.status-text-guna {
+    color: #ff4d4d !important; 
+    font-weight: 800 !important;
+    font-size: 11px !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    /* Efek glow pada teks */
+    text-shadow: 0 0 8px rgba(255, 77, 77, 0.5);
+}
+
+/* 3. Lampu Bulat Kelip CCTV */
+.status-pulse-red {
+    width: 7px;
+    height: 7px;
+    background-color: #ff4d4d;
+    border-radius: 50%;
+    display: inline-block;
+    box-shadow: 0 0 8px #ff4d4d;
+    animation: cctv-sleek-pulse 1.8s infinite ease-in-out;
+}
+
+@keyframes cctv-sleek-pulse {
+    0%, 100% { transform: scale(0.9); opacity: 1; }
+    50% { transform: scale(1.25); opacity: 0.4; }
+}
+.aesthetic-clock {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f97316;
+    padding: 4px 12px; /* Besarkan sikit padding kiri kanan */
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 800;
+    font-family: 'Inter', monospace;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    white-space: nowrap;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+/* Badge Jenis Pakej untuk Mini Session */
+.package-badge {
+    background-color: #f1f5f9; /* Kelabu lembut */
+    color: #64748b;            /* Tulisan slate */
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 9px;            /* Kecil sikit sbb dalam mini-row */
+    font-weight: 800;
+    text-transform: uppercase;
+    border: 1px solid #e2e8f0;
+    margin-left: 4px;
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+    letter-spacing: 0.3px;
+}
+
+/* Kalau nak nampak lagi premium, letak sikit warna ikut keyword */
+.package-badge:contains("GOLD"), 
+.package-badge:contains("PCC") {
+    background-color: #fff7ed;
+    color: #c2410c;
+    border-color: #fdba74;
+}
+/* --- NEON GLOW EFFECTS --- */
+
+/* Room Cards (Status Bilik) */
+.room-card {
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 
+                0 0 20px rgba(249, 115, 22, 0.4),
+                0 0 50px rgba(249, 115, 22, 0.2) !important;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.room-card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 
+                0 0 30px rgba(249, 115, 22, 0.7),
+                0 0 70px rgba(249, 115, 22, 0.35) !important;
+    transform: translateY(-3px);
+}
+
+/* Booking Cards (Jadual Hari Ini) */
+.booking-card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05),
+                0 0 20px rgba(249, 115, 22, 0.35),
+                0 0 50px rgba(249, 115, 22, 0.15) !important;
+    transition: box-shadow 0.3s ease !important;
+}
+.booking-card:hover {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1),
+                0 0 30px rgba(249, 115, 22, 0.6),
+                0 0 70px rgba(249, 115, 22, 0.3) !important;
+}
+
+/* Ongoing card — neon merah terang */
+.booking-card.is-ongoing-card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05),
+                0 0 25px rgba(239, 68, 68, 0.5),
+                0 0 60px rgba(239, 68, 68, 0.25) !important;
+}
+
+/* Mini Session Rows */
+.mini-session-row {
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.3),
+                0 0 35px rgba(249, 115, 22, 0.12);
+}
+.mini-session-row:hover {
+    box-shadow: 0 0 25px rgba(249, 115, 22, 0.55),
+                0 0 55px rgba(249, 115, 22, 0.25);
+}
+/* --- NEON SIDEBAR & MODAL --- */
+
+/* Sidebar */
+.sidebar-right {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2),
+                0 0 25px rgba(59, 130, 246, 0.4),
+                0 0 60px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Side Room Items */
+.side-room-item {
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.35),
+                0 0 25px rgba(34, 197, 94, 0.15);
+    transition: box-shadow 0.3s ease;
+}
+.side-room-item:hover {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.6),
+                0 0 45px rgba(34, 197, 94, 0.3);
+}
+
+/* Modal */
+.modal-content {
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3),
+                0 0 30px rgba(249, 115, 22, 0.4),
+                0 0 70px rgba(249, 115, 22, 0.2) !important;
+}
+
+/* Search Filter Box */
+.search-filter-wrapper {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.25),
+                0 0 45px rgba(59, 130, 246, 0.1);
+}
+
+/* Butang Save */
+.btn-save {
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.5),
+                0 0 35px rgba(249, 115, 22, 0.25);
+    transition: box-shadow 0.3s ease;
+}
+.btn-save:hover {
+    box-shadow: 0 0 25px rgba(249, 115, 22, 0.8),
+                0 0 55px rgba(249, 115, 22, 0.4);
+}
+
+/* Butang Primary (Tempah Bilik) */
+.btn-primary {
+    box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.2),
+                0 0 15px rgba(249, 115, 22, 0.45),
+                0 0 35px rgba(249, 115, 22, 0.2);
+}
+.btn-primary:hover {
+    box-shadow: 0 0 25px rgba(249, 115, 22, 0.75),
+                0 0 55px rgba(249, 115, 22, 0.35);
+}
