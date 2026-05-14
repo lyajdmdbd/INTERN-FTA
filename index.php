@@ -196,13 +196,13 @@ $currentQuote = $quotes[array_rand($quotes)];
             }
         }
 
-        /* Container */
+        /* Container - Reduced padding */
         .container {
             position: relative;
             z-index: 10;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem 1rem;
+            padding: 1rem 1rem 2rem; /* Reduced top padding */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -235,279 +235,228 @@ $currentQuote = $quotes[array_rand($quotes)];
             text-shadow: 0 0 20px rgba(245, 130, 32, 0.8), 0 0 40px rgba(245, 130, 32, 0.4);
         }
 
-        /* Header / Logo */
+        /* COMPACT ADVANCED HEADER */
         .header {
             display: flex;
-            justify-content: center;
-            margin-bottom: 3rem;
-            animation: fadeInUp 0.8s ease-out;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem; /* Reduced gap */
+            margin-bottom: 1.5rem; /* Reduced margin */
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .logo-section {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem; /* Reduced gap */
         }
 
         .logo-wrapper {
             position: relative;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .logo-wrapper::before {
             content: '';
             position: absolute;
-            inset: -1rem;
-            background: linear-gradient(to right, rgba(0, 74, 128, 0.2), transparent, rgba(245, 130, 32, 0.2));
+            inset: -1.5rem; /* Smaller glow */
+            background: conic-gradient(from 0deg, rgba(0, 74, 128, 0.3), rgba(245, 130, 32, 0.3), rgba(59, 130, 246, 0.3), rgba(0, 74, 128, 0.3));
             border-radius: 1.5rem;
-            filter: blur(20px);
+            filter: blur(25px);
             opacity: 0;
-            transition: opacity 0.5s;
+            animation: logoGlowRotate 8s linear infinite;
+            z-index: -1;
         }
 
         .logo-wrapper:hover::before {
             opacity: 1;
+            animation-play-state: paused;
         }
 
-        .logo {
-            width: 280px;
-            position: relative;
-            z-index: 1;
+        @keyframes logoGlowRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        @media (min-width: 768px) {
-            .logo { width: 320px; }
+        .logo-glow-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px; /* Smaller ring */
+            height: 320px;
+            border: 2px solid transparent;
+            border-image: linear-gradient(45deg, var(--ft-blue), var(--ft-orange), #3b82f6) 1;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: ringPulse 3s ease-in-out infinite;
+            z-index: -1;
         }
 
-        /* Hero Section */
-        .hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2rem;
-            margin-bottom: 3rem;
-            flex: 1;
-            justify-content: center;
-        }
-
-        @media (min-width: 1024px) {
-            .hero {
-                flex-direction: row;
-                gap: 4rem;
+        @keyframes ringPulse {
+            0%, 100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 0.3;
             }
         }
 
-        /* Tagline Box */
-        .tagline-box {
+        .logo {
+            width: 240px; /* Smaller logo */
             position: relative;
-            animation: slideInLeft 0.8s ease-out 0.5s both;
+            z-index: 2;
+            filter: drop-shadow(0 0 30px rgba(0, 74, 128, 0.5));
+            transition: all 0.4s ease;
         }
 
-        .tagline-box::before {
+        .logo:hover {
+            transform: scale(1.05) rotate(2deg);
+            filter: drop-shadow(0 0 50px rgba(245, 130, 32, 0.8));
+        }
+
+        @media (min-width: 768px) {
+            .logo { width: 280px; }
+            .logo-glow-ring { width: 380px; height: 380px; }
+        }
+
+        /* Compact Header Rotator */
+        .header-rotator {
+            position: relative;
+            max-width: 700px; /* Slightly smaller */
+            text-align: center;
+            animation: slideInUp 1s ease-out 0.3s both;
+        }
+
+        .rotator-container {
+            position: relative;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(25px);
+            border-radius: 1.5rem; /* Smaller radius */
+            padding: 1.75rem 1.5rem; /* Reduced padding */
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .rotator-container { padding: 2.25rem 2.5rem; }
+        }
+
+        .rotator-container::before {
             content: '';
             position: absolute;
-            inset: -2rem;
-            background: linear-gradient(to bottom right, rgba(0, 74, 128, 0.3), transparent);
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(245, 130, 32, 0.1) 50%, transparent 70%);
             border-radius: 1.5rem;
-            filter: blur(30px);
+            animation: shimmer 4s ease-in-out infinite;
+            z-index: 0;
         }
 
-        .tagline-inner {
-            position: relative;
-            border-radius: 1.5rem;
-            padding: 2rem;
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
         }
 
-        @media (min-width: 768px) {
-            .tagline-inner { padding: 3rem; }
-        }
-
-        .tagline-badge {
-            display: flex;
+        .rotator-badge {
+            display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .tagline-badge span {
-            color: var(--ft-orange);
-            font-size: 0.875rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .tagline-title {
-            font-size: 2.5rem;
-            font-weight: 900;
-            line-height: 0.95;
-            letter-spacing: -0.02em;
-        }
-
-        @media (min-width: 768px) {
-            .tagline-title { font-size: 3rem; }
-        }
-
-        @media (min-width: 1024px) {
-            .tagline-title { font-size: 3.75rem; }
-        }
-
-        .tagline-title .line-1 { color: #d1d5db; }
-        .tagline-title .line-2 { color: #9ca3af; }
-        .tagline-title .line-orange { color: var(--ft-orange); }
-
-        .tagline-footer {
-            margin-top: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .tagline-footer span {
-            color: rgba(96, 165, 250, 0.8);
-            font-size: 0.875rem;
-        }
-
-        /* Quote Box */
-        .quote-box {
-            width: 100%;
-            max-width: 28rem;
-            animation: slideInRight 0.8s ease-out 0.7s both;
-        }
-
-        .quote-wrapper {
-            position: relative;
-        }
-
-        .quote-wrapper::before {
-            content: '';
-            position: absolute;
-            inset: -1rem;
-            background: linear-gradient(to bottom right, rgba(245, 130, 32, 0.2), rgba(0, 74, 128, 0.2));
-            border-radius: 1.5rem;
-            filter: blur(20px);
-            animation: pulse-glow 4s ease-in-out infinite;
-        }
-
-        .quote-inner {
-            position: relative;
-            border-radius: 1.5rem;
-            padding: 2rem;
-            border: 2px solid rgba(245, 130, 32, 0.3);
-            transition: border-color 0.5s;
-        }
-
-        .quote-inner:hover {
-            border-color: rgba(245, 130, 32, 0.5);
-        }
-
-        .quote-dots {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            display: flex;
-            gap: 0.25rem;
-        }
-
-        .quote-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        .quote-dot:nth-child(1) { background: var(--ft-orange); }
-        .quote-dot:nth-child(2) { background: #3b82f6; animation-delay: 0.2s; }
-        .quote-dot:nth-child(3) { background: #22c55e; animation-delay: 0.4s; }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .quote-content {
-            min-height: 120px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .quote-text {
-            font-size: 1.125rem;
-            font-style: italic;
-            color: #e5e7eb;
-            line-height: 1.7;
-            margin-bottom: 1rem;
-            opacity: 1;
-            transition: opacity 0.3s;
-        }
-
-        @media (min-width: 768px) {
-            .quote-text { font-size: 1.25rem; }
-        }
-
-        .quote-author {
-            color: var(--ft-orange);
-            font-weight: 700;
-            font-size: 0.875rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-
-        .quote-divider {
-            margin-top: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .quote-bar {
-            height: 4px;
+            gap: 0.5rem; /* Reduced gap */
+            background: linear-gradient(135deg, rgba(0, 74, 128, 0.2), rgba(245, 130, 32, 0.2));
+            padding: 0.5rem 1.25rem; /* Smaller padding */
             border-radius: 9999px;
-        }
-
-        .quote-bar-1 { width: 2rem; background: var(--ft-orange); }
-        .quote-bar-2 { width: 1rem; background: #3b82f6; }
-        .quote-bar-3 { width: 0.5rem; background: #6b7280; }
-
-        /* System Label */
-        .system-label {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 3rem;
-            animation: fadeInUp 0.6s ease-out 0.9s both;
-        }
-
-        .system-badge {
-            border-radius: 9999px;
-            padding: 0.75rem 1.5rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
-            animation: border-glow 3s ease-in-out infinite;
-        }
-
-        .system-badge span {
-            color: #9ca3af;
-            font-size: 0.875rem;
+            margin-bottom: 1rem; /* Reduced margin */
+            font-size: 0.8rem; /* Smaller font */
             font-weight: 600;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            color: var(--ft-orange);
+            position: relative;
+            z-index: 2;
+            animation: badgeFloat 6s ease-in-out infinite;
         }
 
-        .status-dot {
-            width: 8px;
+        @keyframes badgeFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .status-indicator {
+            width: 8px; /* Smaller */
             height: 8px;
-            background: #22c55e;
+            background: linear-gradient(45deg, #22c55e, #4ade80);
             border-radius: 50%;
-            animation: pulse 2s infinite;
+            animation: statusPulse 2s infinite;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.6);
         }
 
-        /* Portal Cards */
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+
+        #rotating-text {
+            font-size: clamp(1.2rem, 3.5vw, 1.9rem); /* Smaller text */
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #e2e8f0 0%, #d1d5db 50%, var(--ft-orange) 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 0.75rem; /* Reduced margin */
+            letter-spacing: -0.02em;
+            animation: textGradientShift 4s ease-in-out infinite;
+        }
+
+        @keyframes textGradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .rotator-progress {
+            position: absolute;
+            bottom: 0.75rem; /* Adjusted position */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px; /* Thinner */
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--ft-blue), var(--ft-orange));
+            border-radius: 2px;
+            width: 0%;
+            animation: progressFill 3.5s linear infinite;
+        }
+
+        @keyframes progressFill {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+
+        /* Portal Cards - Reduced margin */
         .cards-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 1.5rem;
             max-width: 56rem;
-            margin: 0 auto;
+            margin: 0 auto 2rem; /* Reduced bottom margin */
             width: 100%;
-            margin-bottom: 4rem;
         }
 
         @media (min-width: 768px) {
@@ -516,6 +465,7 @@ $currentQuote = $quotes[array_rand($quotes)];
             }
         }
 
+        /* Rest of styles remain exactly the same... */
         .card-link {
             text-decoration: none;
             display: block;
@@ -742,72 +692,30 @@ $currentQuote = $quotes[array_rand($quotes)];
 
     <!-- Main Container -->
     <div class="container">
-        <!-- Header / Logo -->
+        <!-- COMPACT ADVANCED HEADER -->
         <header class="header">
-            <div class="logo-wrapper">
-                <img 
-                    src="Picture1.png" 
-                    alt="Fast Track Academy Logo" 
-                    class="logo"
-                >
+            <div class="logo-section">
+                <div class="logo-wrapper">
+                    <div class="logo-glow-ring"></div>
+                    <img src="Picture1.png" alt="Fast Track Academy Logo" class="logo">
+                </div>
+            </div>
+            
+            <div class="header-rotator glass">
+                <div class="rotator-container">
+                    <div class="rotator-badge">
+                        <div class="status-indicator"></div>
+                        <span>Portal Tempahan Aktif</span>
+                    </div>
+                    <h2 id="rotating-text">
+                        Selamat Datang ke Portal Tempahan Fast Track Academy
+                    </h2>
+                    <div class="rotator-progress">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
             </div>
         </header>
-
-        <!-- Hero Section -->
-        <section class="hero">
-            <!-- Tagline Box -->
-            <div class="tagline-box">
-                <div class="tagline-inner glass neon-border-blue">
-                    <div class="tagline-badge">
-                        <i data-lucide="sparkles" style="width: 20px; height: 20px; color: var(--ft-orange);"></i>
-                        <span>Portal Pintar</span>
-                    </div>
-                    <h1 class="tagline-title">
-                        <span class="line-1">DI SINI,</span><br>
-                        <span class="line-2">SETIAP SESI</span><br>
-                        <span class="line-orange text-glow-orange">BERMULA</span><br>
-                        <span class="line-orange text-glow-orange">DENGAN</span><br>
-                        <span class="line-orange text-glow-orange">TERANCANG</span>
-                    </h1>
-                    <div class="tagline-footer">
-                        <i data-lucide="zap" style="width: 16px; height: 16px; color: #60a5fa;"></i>
-                        <span>Powered by Technology</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quote Box -->
-            <div class="quote-box">
-                <div class="quote-wrapper">
-                    <div class="quote-inner glass-card">
-                        <div class="quote-dots">
-                            <span class="quote-dot"></span>
-                            <span class="quote-dot"></span>
-                            <span class="quote-dot"></span>
-                        </div>
-                        <div class="quote-content">
-                            <p class="quote-text" id="quote-text">"<?php echo htmlspecialchars($currentQuote['text']); ?>"</p>
-                            <span class="quote-author" id="quote-author">- <?php echo htmlspecialchars($currentQuote['author']); ?></span>
-                        </div>
-                        <div class="quote-divider">
-                            <span class="quote-bar quote-bar-1"></span>
-                            <span class="quote-bar quote-bar-2"></span>
-                            <span class="quote-bar quote-bar-3"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- System Label -->
-        <div class="system-label">
-            <div class="system-badge glass">
-                <span>
-                    <span class="status-dot"></span>
-                    Selamat Datang ke Portal Tempahan Fast Track Academy
-                </span>
-            </div>
-        </div>
 
         <!-- Portal Cards -->
         <section class="cards-grid">
@@ -878,30 +786,37 @@ $currentQuote = $quotes[array_rand($quotes)];
             lucide.createIcons();
         });
 
-        // Quotes rotation
-        const quotes = <?php echo json_encode($quotes); ?>;
-        let currentIndex = 0;
-
-        function rotateQuote() {
-            currentIndex = (currentIndex + 1) % quotes.length;
-            const quoteText = document.getElementById('quote-text');
-            const quoteAuthor = document.getElementById('quote-author');
+        const rotatingTexts = [
+            "Selamat Datang ke Portal Tempahan Fast Track Academy",
+            "Di Sini, Setiap Sesi Bermula Dengan Terancang",
+            "Tempahan Mudah • Pantas • Terjamin",
+            "Strive for Excellence in Every Booking",
+            "Portal Tempahan Masa Depan",
+            "Fast Track Your Learning Journey"
+        ];
+        
+        let textIndex = 0;
+        const rotateEl = document.getElementById("rotating-text");
+        const progressFill = document.querySelector('.progress-fill');
+        
+        function rotateHeaderText() {
+            textIndex = (textIndex + 1) % rotatingTexts.length;
             
             // Fade out
-            quoteText.style.opacity = '0';
-            quoteAuthor.style.opacity = '0';
+            rotateEl.style.opacity = '0';
+            rotateEl.style.transform = 'scale(0.95)';
             
             setTimeout(() => {
-                quoteText.textContent = '"' + quotes[currentIndex].text + '"';
-                quoteAuthor.textContent = '- ' + quotes[currentIndex].author;
+                rotateEl.textContent = rotatingTexts[textIndex];
+                rotateEl.style.opacity = '1';
+                rotateEl.style.transform = 'scale(1)';
                 
-                // Fade in
-                quoteText.style.opacity = '1';
-                quoteAuthor.style.opacity = '1';
-            }, 300);
+                // Reset progress bar
+                progressFill.style.width = '0%';
+            }, 400);
         }
-
-        setInterval(rotateQuote, 4000);
+        
+        setInterval(rotateHeaderText, 3500);
 
         // Mouse tracking for blue orb
         const orbBlue = document.getElementById('orb-blue');
