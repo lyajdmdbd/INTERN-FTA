@@ -88,14 +88,10 @@ foreach ($bookings as $b) {
         .btn-action { padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; }
         .btn-action.delete { background: #fee2e2; color: #dc2626; }
         /* Buat skrin bergerak smooth bila tekan link anchor */
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         /* Beri sedikit ruang atas supaya header tak tutup kad bila sampai */
-        .booking-card {
-            scroll-margin-top: 100px;
-        }
+        .booking-card { scroll-margin-top: 100px; }
 
         /* Efek highlight bila kad itu "aktif" selepas ditekan */
         .booking-card:target {
@@ -103,6 +99,241 @@ foreach ($bookings as $b) {
             background-color: #fffaf5 !important;
             transform: scale(1.02);
             box-shadow: 0 10px 20px rgba(245, 130, 32, 0.15);
+        }
+
+        /* ============================================
+           ENTRANCE ANIMATIONS
+        ============================================ */
+        @keyframes fadeSlideUp {
+            from { opacity: 0; transform: translateY(28px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeSlideRight {
+            from { opacity: 0; transform: translateX(-20px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes popIn {
+            0%   { opacity: 0; transform: scale(0.88); }
+            70%  { transform: scale(1.04); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes floatY {
+            0%, 100% { transform: translateY(0px); }
+            50%       { transform: translateY(-5px); }
+        }
+        @keyframes borderGlow {
+            0%, 100% { box-shadow: 0 0 8px rgba(249,115,22,0.3); }
+            50%       { box-shadow: 0 0 22px rgba(249,115,22,0.7), 0 0 45px rgba(249,115,22,0.3); }
+        }
+        @keyframes scanLine {
+            0%   { top: 0%; }
+            100% { top: 100%; }
+        }
+        @keyframes fadeSlideLeft {
+            from { opacity: 0; transform: translateX(30px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes clockPulse {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.75; }
+        }
+
+        /* Room cards — staggered entrance */
+        .room-card { animation: fadeSlideUp 0.5s ease both; }
+        .room-grid .room-card:nth-child(1)  { animation-delay: 0.05s; }
+        .room-grid .room-card:nth-child(2)  { animation-delay: 0.10s; }
+        .room-grid .room-card:nth-child(3)  { animation-delay: 0.15s; }
+        .room-grid .room-card:nth-child(4)  { animation-delay: 0.20s; }
+        .room-grid .room-card:nth-child(5)  { animation-delay: 0.25s; }
+        .room-grid .room-card:nth-child(6)  { animation-delay: 0.30s; }
+        .room-grid .room-card:nth-child(7)  { animation-delay: 0.35s; }
+        .room-grid .room-card:nth-child(8)  { animation-delay: 0.40s; }
+        .room-grid .room-card:nth-child(9)  { animation-delay: 0.45s; }
+        .room-grid .room-card:nth-child(10) { animation-delay: 0.50s; }
+        .room-grid .room-card:nth-child(11) { animation-delay: 0.55s; }
+        .room-grid .room-card:nth-child(12) { animation-delay: 0.60s; }
+
+        /* Booking cards — slide up staggered */
+        .booking-card { animation: fadeSlideUp 0.45s ease both; }
+        .booking-container .booking-card:nth-child(1)  { animation-delay: 0.05s; }
+        .booking-container .booking-card:nth-child(2)  { animation-delay: 0.10s; }
+        .booking-container .booking-card:nth-child(3)  { animation-delay: 0.15s; }
+        .booking-container .booking-card:nth-child(4)  { animation-delay: 0.20s; }
+        .booking-container .booking-card:nth-child(5)  { animation-delay: 0.25s; }
+        .booking-container .booking-card:nth-child(6)  { animation-delay: 0.30s; }
+        .booking-container .booking-card:nth-child(7)  { animation-delay: 0.35s; }
+        .booking-container .booking-card:nth-child(8)  { animation-delay: 0.40s; }
+        .booking-container .booking-card:nth-child(9)  { animation-delay: 0.45s; }
+        .booking-container .booking-card:nth-child(10) { animation-delay: 0.50s; }
+
+        /* Mini session rows — slide from left */
+        .mini-session-row { animation: fadeSlideRight 0.4s ease both; }
+        .card-details-container .mini-session-row:nth-child(1) { animation-delay: 0.1s; }
+        .card-details-container .mini-session-row:nth-child(2) { animation-delay: 0.2s; }
+        .card-details-container .mini-session-row:nth-child(3) { animation-delay: 0.3s; }
+
+        /* Sidebar items pop in */
+        .side-room-item { animation: popIn 0.4s ease both; }
+
+        /* Ongoing card — pulsing glow border */
+        .booking-card.is-ongoing-card {
+            animation: fadeSlideUp 0.45s ease both, borderGlow 2.5s ease-in-out infinite 0.5s;
+        }
+
+        /* Room card hover shimmer sweep */
+        .room-card { position: relative; overflow: hidden; }
+        .room-card::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 60%; height: 100%;
+            background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.45) 50%, transparent 100%);
+            transition: left 0.55s ease;
+            pointer-events: none;
+        }
+        .room-card:hover::after { left: 140%; }
+
+        /* Logo float */
+        .hero .brand img { animation: floatY 4s ease-in-out infinite; }
+
+        /* Status pill pop */
+        .status-pill { animation: popIn 0.35s ease both 0.3s; }
+
+        /* Section title slide */
+        .section-title { animation: fadeSlideRight 0.5s ease both; }
+
+        /* Sidebar entrance */
+        .sidebar-right { animation: fadeSlideLeft 0.55s ease both 0.2s; }
+
+        /* Hero slide down */
+        .hero { animation: slideDown 0.5s ease both; }
+
+        /* Scan line on busy room cards */
+        .room-card.busy { position: relative; }
+        .room-card.busy::before {
+            content: '';
+            position: absolute;
+            left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(249,115,22,0.5), transparent);
+            animation: scanLine 3s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Search box focus glow */
+        .search-box input:focus {
+            outline: none;
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249,115,22,0.15), 0 0 15px rgba(249,115,22,0.2);
+            background: white;
+        }
+
+        /* Active pill bounce */
+        .pill.active { animation: popIn 0.25s ease both; }
+
+        /* Live clock pulse */
+        .aesthetic-clock { animation: clockPulse 2s ease-in-out infinite; }
+
+        /* ============================================
+           HOVER MOVEMENT & PHYSICS
+        ============================================ */
+
+        /* Room cards - lift + spring */
+        .room-card {
+            transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.25s ease !important;
+            transform-origin: center bottom;
+        }
+        .room-card:hover { transform: translateY(-6px) scale(1.015) !important; }
+
+        /* Mini session rows - slide right spring */
+        .mini-session-row {
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s ease !important;
+        }
+        .mini-session-row:hover { transform: translateX(7px) !important; }
+
+        /* Booking cards - lift */
+        .booking-card {
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.3s ease !important;
+        }
+        .booking-card:hover { transform: translateY(-5px) !important; }
+
+        /* Sidebar room items - bounce right */
+        .side-room-item {
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s ease, border-color 0.2s ease !important;
+        }
+        .side-room-item:hover {
+            transform: translateX(8px) !important;
+            border-left-color: #86efac !important;
+            background: #253a50 !important;
+        }
+
+        /* Buttons - push + bounce */
+        .btn-primary, .btn-save {
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s ease, box-shadow 0.2s ease !important;
+        }
+        .btn-primary:hover, .btn-save:hover { transform: translateY(-2px) scale(1.03) !important; }
+        .btn-primary:active, .btn-save:active { transform: translateY(1px) scale(0.97) !important; }
+
+        /* Edit/delete action buttons */
+        .btn-action {
+            transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s ease !important;
+        }
+        .btn-action:hover { transform: translateY(-2px) scale(1.08) !important; }
+        .btn-action:active { transform: scale(0.92) !important; }
+
+        /* Filter pills - bounce */
+        .pill {
+            transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s ease, color 0.2s ease !important;
+        }
+        .pill:hover { transform: translateY(-2px) scale(1.05) !important; }
+        .pill:active { transform: scale(0.94) !important; }
+
+        /* Status pill wiggle */
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25%       { transform: rotate(-5deg); }
+            75%       { transform: rotate(5deg); }
+        }
+        .status-pill { cursor: default; }
+        .status-pill:hover { animation: wiggle 0.4s ease; }
+
+        /* Purpose badges - pop */
+        .mini-purpose {
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important;
+            display: inline-block !important;
+        }
+        .mini-purpose:hover { transform: scale(1.12) !important; }
+
+        /* Close button - spin */
+        .close-btn {
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.2s ease !important;
+        }
+        .close-btn:hover {
+            transform: rotate(90deg) scale(1.2) !important;
+            color: #ef4444 !important;
+        }
+
+        /* Date input - lift */
+        .date-input {
+            transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.2s ease !important;
+        }
+        .date-input:hover {
+            transform: translateY(-2px) !important;
+            border-color: #f97316 !important;
+        }
+
+        /* Kembali button - slide left */
+        button[onclick="confirmKembali()"] {
+            transition: transform 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94), background 0.2s ease !important;
+        }
+        button[onclick="confirmKembali()"]:hover {
+            transform: translateX(-4px) scale(1.05) !important;
+            background: #2d3f55 !important;
         }
     </style>
 </head>
@@ -129,13 +360,11 @@ foreach ($bookings as $b) {
         </div>
     </div>
         <div class="header-actions" style="display: flex; gap: 15px; align-items: center;">
-        <!-- Butang Balik ke Portal (TAMBAH NI) -->
-        <a href="../index.php" style="text-decoration:none;">
-            <button class="btn-action" style="background: #1e293b; color: white; padding: 10px 15px; height: 42px;">
-                <i data-lucide="layout-grid" style="width: 18px;"></i>
-                <span>Kembali</span>
-            </button>
-        </a>
+        <!-- Butang Balik ke Portal -->
+        <button class="btn-action" onclick="confirmKembali()" style="background: #1e293b; color: white; padding: 10px 15px; height: 42px; border: 1px solid rgba(255,255,255,0.1);">
+            <i data-lucide="layout-grid" style="width: 18px;"></i>
+            <span>Kembali</span>
+        </button>
     <input type="date" value="<?= $sel_date ?>" onchange="location='index.php?date='+this.value" class="date-input">
     <button class="btn-primary" onclick="openModal('modalTempah')">+ Tempah Bilik</button>
 </div>
@@ -576,6 +805,63 @@ function startClock() {
     }, 1000);
 }
 document.addEventListener('DOMContentLoaded', startClock);
+
+function confirmKembali() {
+    Swal.fire({
+        title: '← Pulang ke Homepage?',
+        html: `
+            <div style="color:#64748b; font-size:14px; line-height:1.7;">
+                Anda akan keluar dari<br>
+                <strong style="color:#0f172a;">Sistem Tempahan Bilik</strong><br>
+                dan kembali ke Portal Utama.
+            </div>
+        `,
+        icon: 'question',
+        iconColor: '#f97316',
+        showCancelButton: true,
+        confirmButtonColor: '#f97316',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: '🏠 Ya, Kembali',
+        cancelButtonText: 'Kekal di Sini',
+        customClass: {
+            popup: 'swal-kembali-popup',
+            title: 'swal-kembali-title',
+            confirmButton: 'swal-kembali-confirm'
+        },
+        backdrop: `
+            rgba(15, 23, 42, 0.75)
+            url("")
+            left top
+            no-repeat
+        `
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '../index.php';
+        }
+    });
+}
 </script>
+
+<style>
+.swal-kembali-popup {
+    border-radius: 20px !important;
+    padding: 30px !important;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3),
+                0 0 40px rgba(249, 115, 22, 0.25),
+                0 0 80px rgba(249, 115, 22, 0.1) !important;
+    border: 1px solid rgba(249, 115, 22, 0.15) !important;
+}
+.swal-kembali-title {
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+}
+.swal-kembali-confirm {
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.3px !important;
+    box-shadow: 0 0 15px rgba(249, 115, 22, 0.4) !important;
+}
+</style>
 </body>
 </html>
