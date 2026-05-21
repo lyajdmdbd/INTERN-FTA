@@ -95,10 +95,34 @@ foreach ($bookings as $b) {
 
         /* Efek highlight bila kad itu "aktif" selepas ditekan */
         .booking-card:target {
-            border: 2px solid var(--ft-orange);
-            background-color: #fffaf5 !important;
-            transform: scale(1.02);
-            box-shadow: 0 10px 20px rgba(245, 130, 32, 0.15);
+            background-color: #fef3c7 !important;
+            border-left: 6px solid #f59e0b !important;
+            transform: scale(1.02) !important;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.4),
+                        0 10px 30px rgba(245, 158, 11, 0.25) !important;
+            animation: highlightPulse 1.8s ease-in-out 3 !important;
+            opacity: 1 !important;
+            z-index: 10;
+            position: relative;
+        }
+
+        @keyframes highlightPulse {
+            0%, 100% { box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.4), 0 10px 30px rgba(245, 158, 11, 0.25); }
+            50%       { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0.2), 0 15px 40px rgba(245, 158, 11, 0.4); }
+        }
+
+        /* Sama style, untuk JS fallback */
+        .booking-card.manual-highlight {
+            background-color: #fef3c7 !important;
+            border-left: 6px solid #f59e0b !important;
+            transform: scale(1.02) !important;
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.4),
+                        0 10px 30px rgba(245, 158, 11, 0.25) !important;
+            animation: highlightPulse 1.8s ease-in-out 3 !important;
+            opacity: 1 !important;
+            z-index: 10;
+            position: relative;
+            transition: background-color 1s ease, box-shadow 1s ease !important;
         }
 
         /* ============================================
@@ -347,7 +371,7 @@ foreach ($bookings as $b) {
     z-index: -1;
     opacity: 0.9;
 ">
-    <source src="bgvideo2.mp4" type="video/mp4">
+    <source src="bgvideo10.mp4" type="video/mp4">
 </video>
 <header class="hero">
     <div class="header-container">
@@ -483,15 +507,37 @@ foreach ($bookings as $b) {
             $is_past = ($sel_date == $today && $now_time > $b['end_time']);
             $is_ongoing = ($sel_date == $today && $now_time >= $b['start_time'] && $now_time <= $b['end_time']);
         ?>
-            <!-- Pastikan class 'is-ongoing-card' ada di sini[cite: 13] -->
+            <?php
+                if ($is_past) {
+                    $card_bg      = '#f8fafc';
+                    $card_border  = '#cbd5e1';
+                    $time_color   = '#94a3b8';
+                    $card_opacity = '0.65';
+                } elseif ($is_ongoing) {
+                    $card_bg      = '#fff1f2';
+                    $card_border  = '#ef4444';
+                    $time_color   = '#dc2626';
+                    $card_opacity = '1';
+                } else {
+                    $card_bg      = '#fff7ed';
+                    $card_border  = '#f97316';
+                    $time_color   = '#000000';
+                    $card_opacity = '1';
+                }
+            ?>
+            <!-- Pastikan class 'is-ongoing-card' ada di sini -->
             <div id="booking-<?= $b['id'] ?>" 
                  class="booking-card <?= $is_past ? 'past-booking' : '' ?> <?= $is_ongoing ? 'is-ongoing-card' : '' ?>" 
-                 style="background: white; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 5px solid <?= $is_past ? '#cbd5e1' : ($is_ongoing ? '#ef4444' : '#f97316') ?>; margin-bottom: 15px; opacity: <?= $is_past ? '0.6' : '1' ?>;">
+                 style="background: <?= $card_bg ?>; padding: 20px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 5px solid <?= $card_border ?>; margin-bottom: 15px; opacity: <?= $card_opacity ?>;">
                 
                 <div style="width: 140px;">
-                    <div style="font-weight: 800; color: #1e293b; font-size: 15px;"><?= date('H:i', strtotime($b['start_time'])) ?> - <?= date('H:i', strtotime($b['end_time'])) ?></div>
+                    <div style="font-weight: 800; color: <?= $time_color ?>; font-size: 15px;"><?= date('H:i', strtotime($b['start_time'])) ?> - <?= date('H:i', strtotime($b['end_time'])) ?></div>
                     <?php if($is_ongoing): ?>
-                        <span class="ongoing-label" style="color: #ef4444; font-size: 10px; font-weight: 800;">SEDANG GUNA</span>
+                        <span class="ongoing-status-badge" style="margin-top: 5px;">
+                            <span class="status-pulse-red"></span>
+                            <span class="status-text-guna">SEDANG GUNA</span>
+                        </span>
+
                     <?php endif; ?>
                 </div>
 
@@ -805,6 +851,27 @@ function startClock() {
     }, 1000);
 }
 document.addEventListener('DOMContentLoaded', startClock);
+
+// Highlight kad bila tiba dari anchor link
+function highlightTargetCard() {
+    const hash = window.location.hash;
+    if (!hash) return;
+
+    const target = document.querySelector(hash);
+    if (!target) return;
+
+    // Tambah class highlight manual
+    target.classList.add('manual-highlight');
+
+    // Buang lepas 4 saat
+    setTimeout(() => {
+        target.classList.remove('manual-highlight');
+    }, 4000);
+}
+
+// Jalankan bila page load & bila hash berubah
+window.addEventListener('load', highlightTargetCard);
+window.addEventListener('hashchange', highlightTargetCard);
 
 function confirmKembali() {
     Swal.fire({
