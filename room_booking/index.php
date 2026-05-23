@@ -635,8 +635,8 @@ foreach ($bookings as $b) {
                             elseif($r['room_name'] == "AL FARABI") $cap = " (16)";
                             elseif($r['room_name'] == "AL GHAZALI") $cap = " (13)";
                             elseif($r['room_name'] == "MEZZANINE") $cap = " (16-20)";
-                            elseif($r['room_name'] == "LECTURE ROOM 1") $cap = " (16-20)";
-                            elseif($r['room_name'] == "LECTURE ROOM 2") $cap = " (16-20)";
+                            elseif($r['room_name'] == "LECTURE ROOM 3") $cap = " (16-20)";
+                            elseif($r['room_name'] == "LECTURE ROOM 4") $cap = " (16-20)";
                             elseif($r['room_name'] == "MARS") $cap = " (PERSONAL 1)";
                             elseif($r['room_name'] == "PLUTO") $cap = " (PERSONAL 1-2)";
                         ?>
@@ -709,8 +709,8 @@ foreach ($bookings as $b) {
                             elseif($r['room_name'] == "AL FARABI") $cap = " (16)";
                             elseif($r['room_name'] == "AL GHAZALI") $cap = " (13)";
                             elseif($r['room_name'] == "MEZZANINE") $cap = " (16-20)";
-                            elseif($r['room_name'] == "LECTURE ROOM 1") $cap = " (16-20)";
-                            elseif($r['room_name'] == "LECTURE ROOM 2") $cap = " (16-20)";
+                            elseif($r['room_name'] == "LECTURE ROOM 3") $cap = " (16-20)";
+                            elseif($r['room_name'] == "LECTURE ROOM 4") $cap = " (16-20)";
                             elseif($r['room_name'] == "MARS") $cap = " (PERSONAL 1-2)";
                             elseif($r['room_name'] == "PLUTO") $cap = " (PERSONAL 1-2)";
                         ?>
