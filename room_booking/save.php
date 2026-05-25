@@ -57,8 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 );
 
     if ($stmt->execute()) {
-    header("Location: index.php?date=" . $booking_date);
+    $safe_date = preg_replace('/[^0-9\-]/', '', $booking_date);
+    header("Location: index.php?date=" . $safe_date);
 } else {
-    echo "Error: " . $stmt->error;
+    echo "Ralat berlaku. Sila hubungi admin.";
 }
 }
