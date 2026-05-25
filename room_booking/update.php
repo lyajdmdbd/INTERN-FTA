@@ -62,10 +62,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
     // Ambil tarikh asal untuk redirect balik
-    $res = $conn->query("SELECT booking_date FROM bookings WHERE id = $id");
+    $res = $conn->query("SELECT booking_date FROM bookings WHERE id = " . intval($id));
     $row = $res->fetch_assoc();
-    header("Location: index.php?date=" . $row['booking_date']);
+    $safe_date = preg_replace('/[^0-9\-]/', '', $row['booking_date'] ?? '');
+    header("Location: index.php?date=" . $safe_date);
 } else {
-    echo "Update Failed: " . $stmt->error;
+    echo "Update gagal. Sila hubungi admin.";
 }
 }
