@@ -49,6 +49,10 @@ $currentQuote = $quotes[array_rand($quotes)];
             box-sizing: border-box;
         }
 
+        html {
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--bg-dark);
@@ -202,7 +206,7 @@ $currentQuote = $quotes[array_rand($quotes)];
             z-index: 10;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem 1rem 2rem; /* Reduced top padding */
+            padding: 0rem 1rem 2rem; /* Push header up */
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -241,7 +245,7 @@ $currentQuote = $quotes[array_rand($quotes)];
             flex-direction: column;
             align-items: center;
             gap: 1rem; /* Reduced gap */
-            margin-bottom: 1.5rem; /* Reduced margin */
+            margin-bottom: 1rem; /* Reduced margin */
             animation: fadeInUp 1s ease-out;
         }
 
@@ -285,8 +289,8 @@ $currentQuote = $quotes[array_rand($quotes)];
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 320px; /* Smaller ring */
-            height: 320px;
+            width: min(320px, 80vw); /* Responsive */
+            height: min(320px, 80vw);
             border: 2px solid transparent;
             border-image: linear-gradient(45deg, var(--ft-blue), var(--ft-orange), #3b82f6) 1;
             border-radius: 50%;
@@ -307,7 +311,7 @@ $currentQuote = $quotes[array_rand($quotes)];
         }
 
         .logo {
-            width: 240px; /* Smaller logo */
+            width: min(240px, 60vw); /* Responsive */
             position: relative;
             z-index: 2;
             filter: drop-shadow(0 0 30px rgba(0, 74, 128, 0.5));
@@ -582,6 +586,33 @@ $currentQuote = $quotes[array_rand($quotes)];
             color: white;
         }
 
+        /* --- PERANTI ICON GRID --- */
+        .card-icon-peranti {
+            flex-direction: column !important;
+            gap: 4px;
+            padding: 8px;
+        }
+
+        .peranti-icon-top {
+            width: 1.6rem !important;
+            height: 1.6rem !important;
+            color: white;
+        }
+
+        .peranti-icon-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .peranti-icon-sm {
+            width: 1.3rem !important;
+            height: 1.3rem !important;
+            color: white;
+            opacity: 0.92;
+        }
+
         .card-title {
             font-size: 1.5rem;
             font-weight: 700;
@@ -743,11 +774,13 @@ $currentQuote = $quotes[array_rand($quotes)];
                 <div class="card card-orange">
                     <div class="card-inner glass-card">
                         <div class="card-icon-wrapper">
-                            <div class="card-icon" style="position: relative;">
-                            <i data-lucide="projector"></i>
-                            <i data-lucide="tablet" style="position:absolute; bottom:4px; left:4px; width:20px; height:20px; opacity:0.85; color:white;"></i>
-                            <i data-lucide="tablet-smartphone" style="position:absolute; top:4px; right:4px; width:20px; height:20px; opacity:0.85; color:white;"></i>
-                        </div>
+                            <div class="card-icon card-icon-peranti">
+                                <i data-lucide="projector" class="peranti-icon-top"></i>
+                                <div class="peranti-icon-row">
+                                    <i data-lucide="tablet" class="peranti-icon-sm"></i>
+                                    <i data-lucide="tablet-smartphone" class="peranti-icon-sm"></i>
+                                </div>
+                            </div>
                         </div>
                         <h2 class="card-title">Tempahan Peranti</h2>
                         <p class="card-desc">Tempah projector, tablet, atau iPad untuk sesi pembelajaran anda.</p>
