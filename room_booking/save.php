@@ -32,8 +32,63 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $check_stmt->execute();
 
     if ($check_stmt->get_result()->num_rows > 0) {
-        echo "<script>alert('Alamak, Clash! Waktu ni dah ada kelas lain.'); window.history.back();</script>";
-        exit;
+echo "
+<!DOCTYPE html>
+<html>
+<head>
+    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+    <link href='https://fonts.googleapis.com/css2?family=Inter:wght@700;800&display=swap' rel='stylesheet'>
+</head>
+<body>
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: '🚨 Clash Waktu!',
+        html: `
+            <div style='font-family:Inter,sans-serif; font-size:14px; color:#64748b; line-height:1.8;'>
+                Bilik ini <strong style='color:#ef4444;'>sudah ditempah</strong><br>
+                pada waktu yang sama.<br><br>
+                <span style='background:#fff1f2; padding:6px 14px; border-radius:8px; font-weight:700; color:#dc2626; font-size:13px; border:1px solid #fecaca;'>
+                    ⏰ Sila pilih waktu lain
+                </span>
+            </div>
+        `,
+        confirmButtonText: '← Cuba Semula',
+        confirmButtonColor: '#f97316',
+        background: '#fff',
+        showClass: {
+            popup: 'animate__animated animate__shakeX'
+        },
+        customClass: {
+            popup: 'clash-popup',
+            title: 'clash-title',
+            confirmButton: 'clash-btn'
+        }
+    }).then(() => { window.history.back(); });
+</script>
+<style>
+    .clash-popup {
+        border-radius: 20px !important;
+        box-shadow: 0 25px 50px rgba(0,0,0,0.2),
+                    0 0 40px rgba(239,68,68,0.25),
+                    0 0 80px rgba(239,68,68,0.1) !important;
+        border: 1px solid rgba(239,68,68,0.15) !important;
+    }
+    .clash-title {
+        font-size: 22px !important;
+        font-weight: 800 !important;
+        color: #0f172a !important;
+    }
+    .clash-btn {
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        padding: 12px 28px !important;
+        box-shadow: 0 0 15px rgba(249,115,22,0.4) !important;
+    }
+</style>
+</body>
+</html>";
+exit;        exit;
     }
 
     $sql = "INSERT INTO bookings (teacher_name, room_id, booking_date, start_time, end_time, purpose, subject, student_group, remarks, is_permanent, day_of_week, package_name) 
