@@ -770,7 +770,7 @@ $currentQuote = $quotes[array_rand($quotes)];
             </a>
 
             <!-- Tempahan Peranti Card -->
-            <a href="tempahan_projector.php" class="card-link">
+            <a href="../projector" class="card-link">
                 <div class="card card-orange">
                     <div class="card-inner glass-card">
                         <div class="card-icon-wrapper">
