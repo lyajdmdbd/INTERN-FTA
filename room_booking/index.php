@@ -32,6 +32,15 @@ $stmt->bind_param('ss', $sel_date, $sel_day); // $sel_day mestilah 'ISNIN', 'SEL
 $stmt->execute();
 $bookings = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
+// --- SORT: Ongoing & Upcoming dulu, Past paling bawah ---
+usort($bookings, function($a, $b) use ($today, $now_time, $sel_date) {
+    $a_past = ($sel_date == $today && $now_time > $a['end_time']);
+    $b_past = ($sel_date == $today && $now_time > $b['end_time']);
+    if ($a_past && !$b_past) return 1;
+    if (!$a_past && $b_past) return -1;
+    return strcmp($a['start_time'], $b['start_time']);
+});
+
 $occupied_ids = []; 
 $ongoing_bookings = []; 
 
@@ -263,6 +272,49 @@ foreach ($bookings as $b) {
         /* Live clock pulse */
         .aesthetic-clock { animation: clockPulse 2s ease-in-out infinite; }
 
+        /* ---- PAST BOOKING: turun ke bawah dengan animation ---- */
+        @keyframes sinkFade {
+            from { opacity: 0; transform: translateY(-16px) scale(0.98); filter: grayscale(0); }
+            to   { opacity: 0.65; transform: translateY(0) scale(1); filter: grayscale(0.4); }
+        }
+        .booking-card.past-booking {
+            animation: sinkFade 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) both !important;
+        }
+        .booking-container .booking-card.past-booking:nth-child(1)  { animation-delay: 0.04s; }
+        .booking-container .booking-card.past-booking:nth-child(2)  { animation-delay: 0.08s; }
+        .booking-container .booking-card.past-booking:nth-child(3)  { animation-delay: 0.12s; }
+        .booking-container .booking-card.past-booking:nth-child(4)  { animation-delay: 0.16s; }
+        .booking-container .booking-card.past-booking:nth-child(5)  { animation-delay: 0.20s; }
+        .booking-container .booking-card.past-booking:nth-child(6)  { animation-delay: 0.24s; }
+        .booking-container .booking-card.past-booking:nth-child(7)  { animation-delay: 0.28s; }
+        .booking-container .booking-card.past-booking:nth-child(8)  { animation-delay: 0.32s; }
+
+        /* Divider label "SUDAH LEPAS" */
+        .past-divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 20px 0 14px;
+            animation: fadeSlideUp 0.4s ease both 0.1s;
+        }
+        .past-divider::before, .past-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #cbd5e1, transparent);
+        }
+        .past-divider span {
+            font-size: 10px;
+            font-weight: 800;
+            color: #94a3b8;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: rgba(248,250,252,0.85);
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
         /* ============================================
            HOVER MOVEMENT & PHYSICS
         ============================================ */
@@ -359,6 +411,64 @@ foreach ($bookings as $b) {
             transform: translateX(-4px) scale(1.05) !important;
             background: #2d3f55 !important;
         }
+
+        /* ---- MOBILE ONLY ---- */
+        /* Toggle button — hidden on desktop */
+        .sidebar-toggle-btn {
+            display: none;
+        }
+
+        @media (max-width: 992px) {
+            /* 1. Sorok terus Status Bilik Hari Ini */
+            .mobile-hide {
+                display: none !important;
+            }
+
+            /* Kurangkan gap Jadual Hari Ini pada mobile */
+            .jadual-heading {
+                margin-top: 15px !important;
+            }
+
+            /* 2. Toggle button muncul pada mobile */
+            .sidebar-toggle-btn {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255,255,255,0.1);
+                border: 1px solid rgba(255,255,255,0.2);
+                border-radius: 8px;
+                color: white;
+                width: 34px;
+                height: 34px;
+                cursor: pointer;
+                transition: background 0.3s ease, transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94) !important;
+                flex-shrink: 0;
+            }
+            .sidebar-toggle-btn:hover {
+                background: rgba(255,255,255,0.2) !important;
+            }
+
+            /* 3. Sidebar collapsible — smooth slide */
+            #sidebar-collapsible {
+                overflow: hidden;
+                transition: max-height 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                            opacity 0.35s ease;
+                max-height: 1000px;
+                opacity: 1;
+            }
+            #sidebar-collapsible.collapsed {
+                max-height: 0;
+                opacity: 0;
+            }
+
+            /* Chevron rotate animation */
+            #sidebar-chevron {
+                transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            #sidebar-chevron.rotated {
+                transform: rotate(180deg);
+            }
+        }
     </style>
 </head>
 <body>
@@ -397,6 +507,7 @@ foreach ($bookings as $b) {
 
 <div class="main-layout">
     <div class="content-left">
+        <div class="mobile-hide">
         <h2 class="section-title" style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
             <i data-lucide="monitor" style="color: #ffffff;"></i> 
             <span style="font-weight: 800; color: #ffffff;">Status Bilik Hari Ini</span>
@@ -482,9 +593,14 @@ foreach ($bookings as $b) {
             </div>
             <?php endforeach; ?>
         </div>
+        </div><!-- end mobile-hide -->
 
-        <h2 class="section-title" style="margin-top: 50px; color: #ffffff;"><i data-lucide="calendar" style="color: #ffffff;"></i> Jadual Hari Ini</h2>
-        <div class="search-filter-wrapper">
+        <h2 class="section-title jadual-heading" style="display: flex; align-items: center; gap: 15px; margin-top: 50px; margin-bottom: 25px; color: #ffffff;">
+            <i data-lucide="calendar" style="color: #ffffff;"></i>
+            <span style="font-weight: 800; color: #ffffff;">Jadual Hari Ini</span>
+            <span class="aesthetic-date"><?= date('D, d M Y', strtotime($sel_date)) ?></span>
+        </h2>        
+            <div class="search-filter-wrapper">
             <div class="search-box">
                 <i data-lucide="search"></i>
                 <input type="text" id="bookingSearch" placeholder="Cari nama guru, subjek atau bilik..." onkeyup="filterBookings()">
@@ -503,10 +619,17 @@ foreach ($bookings as $b) {
             <p style="font-style: italic; font-size: 14px;">Tiada tempahan untuk tarikh ini.</p>
         </div>
     <?php else: ?>
-        <?php foreach($bookings as $b): 
+        <?php 
+        $past_divider_shown = false;
+        foreach($bookings as $b): 
             $is_past = ($sel_date == $today && $now_time > $b['end_time']);
             $is_ongoing = ($sel_date == $today && $now_time >= $b['start_time'] && $now_time <= $b['end_time']);
-        ?>
+
+            // Tunjuk divider sekali sahaja sebelum past card pertama
+            if ($is_past && !$past_divider_shown): 
+                $past_divider_shown = true; ?>
+            <div class="past-divider"><span>✦ Sudah Lepas ✦</span></div>
+        <?php endif; ?>
             <?php
                 if ($is_past) {
                     $card_bg      = '#f8fafc';
@@ -582,14 +705,20 @@ foreach ($bookings as $b) {
     
     <aside class="sidebar-right" style="position: relative; align-self: flex-start;">
         <div class="sidebar-inner">
-                    <h2 class="section-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 25px;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <i data-lucide="rss" style="color: white; width: 22px; height: 22px;" stroke-width="2.5"></i> 
-                        <span style="font-weight: 800; color: white; font-size: 19px; white-space: nowrap; letter-spacing: -0.5px;">Bilik Kosong Sekarang</span>
-                    </div>
-                    
-                    <span id="live-clock" class="aesthetic-clock" style="margin-left: 20px;">00:00:00</span>
-                </h2>     
+            <h2 class="section-title" style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-bottom: 25px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i data-lucide="rss" style="color: white; width: 22px; height: 22px;" stroke-width="2.5"></i> 
+                    <span style="font-weight: 800; color: white; font-size: 19px; white-space: nowrap; letter-spacing: -0.5px;">Bilik Kosong Sekarang</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <span id="live-clock" class="aesthetic-clock" style="margin-left: 0;">00:00:00</span>
+                    <!-- Toggle button — mobile only -->
+                    <button id="sidebar-toggle-btn" onclick="toggleSidebarContent()" class="sidebar-toggle-btn" aria-label="Toggle bilik kosong">
+                        <i data-lucide="chevron-up" id="sidebar-chevron" style="width:18px; height:18px;"></i>
+                    </button>
+                </div>
+            </h2>
+            <div id="sidebar-collapsible">
                 <?php for($lvl=1; $lvl<=3; $lvl++): ?>
                 <div class="lvl-header">ARAS <?= $lvl ?></div>                
                 <div class="side-room-list" style="display: flex; flex-direction: column; gap: 8px;">
@@ -605,6 +734,7 @@ foreach ($bookings as $b) {
                     ?>
                 </div>
             <?php endfor; ?>
+            </div><!-- end sidebar-collapsible -->
         </div>
     </aside>
 </div> 
@@ -751,6 +881,12 @@ foreach ($bookings as $b) {
 
 <script>
     lucide.createIcons();
+    function toggleSidebarContent() {
+        const content = document.getElementById('sidebar-collapsible');
+        const chevron = document.getElementById('sidebar-chevron');
+        content.classList.toggle('collapsed');
+        chevron.classList.toggle('rotated');
+    }
     function openModal(id) { document.getElementById(id).style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     function filterBookings() {
