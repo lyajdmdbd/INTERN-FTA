@@ -272,6 +272,31 @@ foreach ($bookings as $b) {
         /* Live clock pulse */
         .aesthetic-clock { animation: clockPulse 2s ease-in-out infinite; }
 
+        /* ---- SLOT GROUP LABELS (KEKAL / SEMENTARA) ---- */
+        .slot-group-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            margin-top: 4px;
+        }
+        .label-kekal {
+            background: #f0fdf4;
+            color: #15803d;
+            border: 1px solid #bbf7d0;
+        }
+        .label-sementara {
+            background: #fffbeb;
+            color: #b45309;
+            border: 1px solid #fde68a;
+        }
+
         /* ---- PAST BOOKING: turun ke bawah dengan animation ---- */
         @keyframes sinkFade {
             from { opacity: 0; transform: translateY(-16px) scale(0.98); filter: grayscale(0); }
@@ -561,29 +586,49 @@ foreach ($bookings as $b) {
                     <div class="card-details-container" style="margin-top: -5px; gap: 4px; border-top: 1px solid #f1f5f9; padding-top: 8px;">
                         <?php if (!empty($upcoming_or_ongoing)): ?>
                         <div class="card-details-container">
-                            <?php foreach ($upcoming_or_ongoing as $slot): ?>
-                            <a href="#booking-<?= $slot['id'] ?>" style="text-decoration: none; color: inherit; display: block;">
-                            <div class="mini-session-row" style="cursor: pointer;">
-                                <div class="mini-time"><?= date('H:i', strtotime($slot['start_time'])) ?> - <?= date('H:i', strtotime($slot['end_time'])) ?></div>
-                                <div class="mini-teacher"><?= $slot['teacher_name'] ?></div>
-                                <div class="mini-details">
-                                    <?php 
-                                        $p_class = strtolower(explode('/', trim($slot['purpose']))[0]); 
-                                    ?>
-                                    <span class="mini-purpose purpose-bg-<?= $p_class ?>">
-                                        <?= (trim($slot['purpose']) == 'MEETING/LAIN-LAIN') ? 'MEETING' : $slot['purpose'] ?>
-                                    </span>
-                                    <span style="color: #64748b; font-weight: 500;">
-                                    <?php if(trim($slot['purpose']) == 'MEETING/LAIN-LAIN'): ?>
-                                        <?= htmlspecialchars($slot['remarks']) ?>
-                                    <?php else: ?>
-                                    <?= htmlspecialchars($slot['subject']) ?> (<?= htmlspecialchars($slot['student_group']) ?>)<?php if(!empty($slot['package_name'])): ?> • <?= htmlspecialchars($slot['package_name']) ?><?php endif; ?>
+                            <?php
+                            // Split ikut is_permanent
+                            $slots_kekal = array_filter($upcoming_or_ongoing, fn($s) => $s['is_permanent'] == 1);
+                            $slots_sementara = array_filter($upcoming_or_ongoing, fn($s) => $s['is_permanent'] == 0);
+
+                            // Helper untuk render slot rows
+                            $renderSlots = function($slots) { ?>
+                                <?php foreach ($slots as $slot): ?>
+                                <a href="#booking-<?= $slot['id'] ?>" style="text-decoration: none; color: inherit; display: block;">
+                                <div class="mini-session-row" style="cursor: pointer;">
+                                    <div class="mini-time"><?= date('H:i', strtotime($slot['start_time'])) ?> - <?= date('H:i', strtotime($slot['end_time'])) ?></div>
+                                    <div class="mini-teacher"><?= $slot['teacher_name'] ?></div>
+                                    <div class="mini-details">
+                                        <?php $p_class = strtolower(explode('/', trim($slot['purpose']))[0]); ?>
+                                        <span class="mini-purpose purpose-bg-<?= $p_class ?>">
+                                            <?= (trim($slot['purpose']) == 'MEETING/LAIN-LAIN') ? 'MEETING' : $slot['purpose'] ?>
+                                        </span>
+                                        <span style="color: #64748b; font-weight: 500;">
+                                        <?php if(trim($slot['purpose']) == 'MEETING/LAIN-LAIN'): ?>
+                                            <?= htmlspecialchars($slot['remarks']) ?>
+                                        <?php else: ?>
+                                            <?= htmlspecialchars($slot['subject']) ?> (<?= htmlspecialchars($slot['student_group']) ?>)<?php if(!empty($slot['package_name'])): ?> • <?= htmlspecialchars($slot['package_name']) ?><?php endif; ?>
                                         <?php endif; ?>
-                                </span>
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            </a>
-                        <?php endforeach; ?>
+                                </a>
+                                <?php endforeach; ?>
+                            <?php }; ?>
+
+                            <?php if (!empty($slots_kekal)): ?>
+                                <div class="slot-group-label label-kekal">
+                                    <i data-lucide="lock" style="width:10px; height:10px;"></i> KEKAL
+                                </div>
+                                <?php $renderSlots($slots_kekal); ?>
+                            <?php endif; ?>
+
+                            <?php if (!empty($slots_sementara)): ?>
+                                <div class="slot-group-label label-sementara">
+                                    <i data-lucide="clock" style="width:10px; height:10px;"></i> SEMENTARA
+                                </div>
+                                <?php $renderSlots($slots_sementara); ?>
+                            <?php endif; ?>
                         </div>
                     <?php endif; ?>
                     </div>
@@ -789,7 +834,7 @@ foreach ($bookings as $b) {
             <div id="class_fields_modalTempah">
                 <div class="form-row">
                     <div class="form-group"><label>Subjek</label><input type="text" name="subject" placeholder="Cth: BM / BI / MT"></div>
-                    <div class="form-group"><label>Tingkatan/Darjah</label><input type="text" name="student_group" placeholder="Cth: T5 / D2 / T1 G2">
+                    <div class="form-group"><label>Darjah/Tingkatan</label><input type="text" name="student_group" placeholder="Cth: T5 / D2 / T1 G2">
                         <small style="display: block; margin-top: 5px; color: #64748b; font-size: 11px; line-height: 1.3;">
                         *Nyatakan kumpulan kelas JIKA ADA 
                     </small>
@@ -863,7 +908,7 @@ foreach ($bookings as $b) {
             <div id="class_fields_modalEdit">
                 <div class="form-row">
                     <div class="form-group"><label>Subjek</label><input type="text" name="subject" id="edit_subject" placeholder="Subjek"></div>
-                    <div class="form-group"><label>Tingkatan/Darjah</label><input type="text" name="student_group" id="edit_group" placeholder="Tingkatan"></div>
+                    <div class="form-group"><label>Darjah/Tingkatan</label><input type="text" name="student_group" id="edit_group" placeholder="Tingkatan"></div>
                 </div>
                 <div class="form-group"><label>Jenis Pakej</label><input type="text" name="package_name" id="edit_package" placeholder="Nama Pakej"></div>
             </div>
