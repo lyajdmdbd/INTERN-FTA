@@ -1,0 +1,491 @@
+@import url('https://fonts.googleapis.com/css?family=Inter:wght@400;600;700;800&display=swap');
+
+/* --- RESET & BASE --- */
+* { box-sizing: border-box; font-family: 'Inter', sans-serif; }
+body { margin: 0; background-color: #f8fafc; color: #1e293b; line-height: 1.5; }
+
+/* --- GLOBAL SMOOTH HOVER --- */
+a, button, input, select, textarea,
+.room-card, .booking-card, .mini-session-row,
+.side-room-item, .btn-primary, .btn-save, .btn-secondary,
+.close-btn, .date-input, .status-pill, .package-badge {
+    transition: all 0.5s ease-in-out;
+}
+
+/* --- HEADER / HERO --- */
+.hero { background-color: #0f172a; color: white; padding: 25px 50px; border-bottom: 5px solid #f97316; }
+.header-container { display: flex; justify-content: space-between; align-items: center; max-width: 1400px; margin: 0 auto; }
+.hero h1 { margin: 0; font-size: 20px; font-weight: 800; letter-spacing: 1px; }
+.hero p { margin: 5px 0 0; font-size: 12px; color: #94a3b8; }
+
+.date-input { padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: white; cursor: pointer; }
+.btn-primary { background: #f97316; color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: all 0.5s ease-in-out; box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.2); }
+.btn-primary:hover { transform: translateY(-2px); background: #ea580c; }
+
+/* --- MAIN LAYOUT --- */
+.main-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px;
+}
+.content-left { flex: 1; }
+
+.sidebar-right {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+    width: 380px !important;
+    padding: 25px;
+    border-radius: 16px;
+    position: sticky;
+    top: 30px;
+    height: fit-content;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+.lvl-header { font-size: 11px; color: #94a3b8; font-weight: 800; margin: 15px 0 10px; letter-spacing: 1px; text-transform: uppercase; }
+.side-room-item { background: #1e293b; padding: 12px 15px; border-radius: 10px; font-size: 13px; font-weight: 600; margin-bottom: 8px; border-left: 3px solid #22c55e; }
+
+/* --- ROOM GRID & CARDS --- */
+.room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+.room-card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s; }
+.room-card.busy { background: #fff7ed; }
+.status-pill { font-size: 10px; padding: 4px 10px; border-radius: 6px; font-weight: 800; }
+.status-pill.empty { background: #f0fdf4; color: #15803d; }
+.status-pill.booked { background: #ffedd5; color: #c2410c; }
+
+/* --- MODAL STYLING --- */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 20px;
+}
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 550px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+}
+.modal-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.modal-header h2 { margin: 0; font-size: 22px; font-weight: 800; }
+.close-btn { background: none; border: none; font-size: 28px; cursor: pointer; color: #94a3b8; }
+
+/* --- FORM STYLING --- */
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 6px; color: #475569; }
+.form-group input, .form-group select, .form-group textarea {
+    width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px;
+    font-size: 14px; background: #f8fafc; transition: all 0.45s ease-in-out;
+}
+.form-group input:focus { outline: none; border-color: #3b82f6; background: white; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
+.btn-save { background: #f97316; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+.btn-secondary { background: #f1f5f9; color: #64748b; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; }
+
+/* --- UTILITIES --- */
+.ongoing-label { color: #f97316; font-weight: 800; font-size: 10px; display: block; margin-top: 5px; animation: pulse 2s infinite; }
+@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+/* --- CARD DETAILS --- */
+.card-details-container { margin-top: 15px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid #f1f5f9; padding-top: 12px; }
+.mini-session-row { background: #f8fafc; border-radius: 10px; padding: 10px; border-left: 4px solid #f97316; transition: transform 0.5s ease-in-out, background 0.5s ease-in-out, box-shadow 0.5s ease-in-out; }
+.mini-session-row:hover { transform: translateX(5px); background: #f1f5f9; }
+.mini-time { font-size: 11px; font-weight: 800; color: #f97316; display: block; }
+.mini-teacher { font-size: 13px; font-weight: 700; color: #1e293b; text-transform: uppercase; }
+.mini-details { font-size: 10px; color: #64748b; margin-top: 4px; }
+.mini-purpose {
+    display: inline-block !important; min-width: 65px !important; text-align: center !important;
+    margin-right: 8px !important; padding: 3px 10px !important; font-size: 10px !important;
+    font-weight: 800 !important; border-radius: 6px !important; text-transform: uppercase;
+    letter-spacing: 0.5px; border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.purpose-bg-pcc     { background-color: #b39ddb !important; color: #2e1065 !important; box-shadow: 0 0 10px rgba(179, 157, 219, 0.4); }
+.purpose-bg-po      { background-color: #a5d6a7 !important; color: #064e3b !important; box-shadow: 0 0 10px rgba(165, 214, 167, 0.4); }
+.purpose-bg-center  { background-color: #90caf9 !important; color: #1e3a8a !important; box-shadow: 0 0 10px rgba(144, 202, 249, 0.4); }
+.purpose-bg-og      { background-color: #ffcc80 !important; color: #78350f !important; box-shadow: 0 0 10px rgba(255, 204, 128, 0.4); }
+.purpose-bg-meeting { background-color: #f48fb1 !important; color: #880e4f !important; box-shadow: 0 0 10px rgba(244, 143, 177, 0.4); }
+
+/* --- ONGOING BADGE --- */
+.ongoing-status-badge { background: transparent !important; border: none !important; display: inline-flex !important; align-items: center; gap: 8px; padding: 0 !important; }
+.status-text-guna { color: #ff4d4d !important; font-weight: 800 !important; font-size: 11px !important; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 8px rgba(255, 77, 77, 0.5); }
+.status-pulse-red { width: 7px; height: 7px; background-color: #ff4d4d; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #ff4d4d; animation: cctv-sleek-pulse 1.8s infinite ease-in-out; }
+@keyframes cctv-sleek-pulse { 0%, 100% { transform: scale(0.9); opacity: 1; } 50% { transform: scale(1.25); opacity: 0.4; } }
+
+.aesthetic-clock { background: rgba(255, 255, 255, 0.1); color: #f97316; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; font-family: 'Inter', monospace; border: 1px solid rgba(255, 255, 255, 0.2); white-space: nowrap; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+
+/* --- PACKAGE BADGE --- */
+.package-badge { background-color: #f1f5f9; color: #64748b; padding: 1px 6px; border-radius: 4px; font-size: 9px; font-weight: 800; text-transform: uppercase; border: 1px solid #e2e8f0; margin-left: 4px; display: inline-flex; align-items: center; vertical-align: middle; letter-spacing: 0.3px; }
+
+/* --- NEON GLOW EFFECTS (KEKAL SAMA) --- */
+.room-card {
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 0 20px rgba(249, 115, 22, 0.4), 0 0 50px rgba(249, 115, 22, 0.2) !important;
+    transition: box-shadow 0.55s ease-in-out, transform 0.55s ease-in-out;
+}
+.room-card:hover { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 0 30px rgba(249, 115, 22, 0.7), 0 0 70px rgba(249, 115, 22, 0.35) !important; transform: translateY(-3px); }
+.booking-card { box-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 0 20px rgba(249, 115, 22, 0.35), 0 0 50px rgba(249, 115, 22, 0.15) !important; transition: box-shadow 0.55s ease-in-out !important; }
+.booking-card:hover { box-shadow: 0 2px 4px rgba(0,0,0,0.1), 0 0 30px rgba(249, 115, 22, 0.6), 0 0 70px rgba(249, 115, 22, 0.3) !important; }
+.booking-card.is-ongoing-card { box-shadow: 0 2px 4px rgba(0,0,0,0.05), 0 0 25px rgba(239, 68, 68, 0.5), 0 0 60px rgba(239, 68, 68, 0.25) !important; }
+.mini-session-row { box-shadow: 0 0 15px rgba(249, 115, 22, 0.3), 0 0 35px rgba(249, 115, 22, 0.12); }
+.mini-session-row:hover { box-shadow: 0 0 25px rgba(249, 115, 22, 0.55), 0 0 55px rgba(249, 115, 22, 0.25); }
+.sidebar-right { box-shadow: 0 10px 25px rgba(0,0,0,0.2), 0 0 25px rgba(59, 130, 246, 0.4), 0 0 60px rgba(59, 130, 246, 0.2) !important; }
+.side-room-item { box-shadow: 0 0 12px rgba(34, 197, 94, 0.35), 0 0 25px rgba(34, 197, 94, 0.15); transition: box-shadow 0.5s ease-in-out; }
+.side-room-item:hover { box-shadow: 0 0 20px rgba(34, 197, 94, 0.6), 0 0 45px rgba(34, 197, 94, 0.3); }
+.modal-content { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3), 0 0 30px rgba(249, 115, 22, 0.4), 0 0 70px rgba(249, 115, 22, 0.2) !important; }
+.search-filter-wrapper { box-shadow: 0 0 20px rgba(59, 130, 246, 0.25), 0 0 45px rgba(59, 130, 246, 0.1); }
+.btn-save { box-shadow: 0 0 15px rgba(249, 115, 22, 0.5), 0 0 35px rgba(249, 115, 22, 0.25); transition: box-shadow 0.5s ease-in-out, transform 0.5s ease-in-out; }
+.btn-save:hover { box-shadow: 0 0 25px rgba(249, 115, 22, 0.8), 0 0 55px rgba(249, 115, 22, 0.4); }
+.btn-primary { box-shadow: 0 4px 6px -1px rgba(249, 115, 22, 0.2), 0 0 15px rgba(249, 115, 22, 0.45), 0 0 35px rgba(249, 115, 22, 0.2); }
+.btn-primary:hover { box-shadow: 0 0 25px rgba(249, 115, 22, 0.75), 0 0 55px rgba(249, 115, 22, 0.35); }
+
+
+/* ================================================================
+   📱 MOBILE — PATCH BETUL IKUT HTML SEBENAR
+   ================================================================ */
+
+@media (max-width: 992px) {
+
+    /* ── HERO ── */
+    .hero {
+        padding: 14px 16px 14px;
+        border-bottom-width: 3px;
+    }
+
+    .header-container {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px;
+        text-align: center;
+    }
+
+    /* Brand: logo + teks susun mendatar, tengah */
+    .brand {
+        justify-content: center !important;
+        gap: 12px !important;
+    }
+
+    .brand img { height: 44px !important; }
+
+    .brand > div {
+        padding-left: 12px !important;
+        border-left: 2px solid rgba(255,255,255,0.2) !important;
+    }
+
+    .hero h1 { font-size: 15px !important; }
+    .hero p  { font-size: 10px !important; }
+
+    /* .header-actions — ini class yang betul dalam HTML */
+    .header-actions {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    /* Butang Kembali — sama besar dengan yang lain */
+    .header-actions .btn-action {
+        height: 44px !important;
+        padding: 0 14px !important;
+        font-size: 13px !important;
+        border-radius: 10px !important;
+        flex: 0 0 auto;
+    }
+
+    .date-input {
+        flex: 1 !important;
+        min-width: 130px !important;
+        max-width: 160px !important;
+        font-size: 14px !important;
+        padding: 11px 12px !important;
+        border-radius: 10px !important;
+        text-align: center;
+    }
+
+    .btn-primary {
+        flex: 1 !important;
+        min-width: 130px !important;
+        max-width: 180px !important;
+        font-size: 13px !important;
+        padding: 11px 14px !important;
+        text-align: center;
+        border-radius: 10px !important;
+    }
+
+    /* ── LAYOUT ── */
+    .main-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 12px !important;
+        gap: 14px !important;
+    }
+
+    /* ── SIDEBAR — naik atas, dark & proper ── */
+    .sidebar-right {
+        background-color: #0f172a !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        position: static !important;
+        order: -1 !important;
+        padding: 16px 18px !important;
+        border-radius: 14px !important;
+        display: block !important;
+        align-self: auto !important;
+    }
+
+    /* Paksa semua teks dalam sidebar jadi putih */
+    .sidebar-right,
+    .sidebar-right * {
+        color: #ffffff !important;
+    }
+    /* Kecuali lvl-header yang memang kena kelabu */
+    .sidebar-right .lvl-header { color: #94a3b8 !important; }
+    /* Dan italic "Penuh / Tiada" */
+    .sidebar-right p { color: #94a3b8 !important; }
+
+    /* .side-room-list — ini class yang BETUL dalam HTML */
+    .side-room-list {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    .side-room-item {
+        flex: 0 0 auto !important;
+        min-width: 90px !important;
+        margin-bottom: 0 !important;
+        font-size: 12px !important;
+        padding: 9px 12px !important;
+        border-radius: 10px !important;
+        color: #fff !important;
+        white-space: nowrap;
+    }
+
+    /* Sidebar section title — flex wrap */
+    .sidebar-right .section-title {
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        margin-bottom: 16px !important;
+        font-size: 15px !important;
+    }
+
+    /* Clock dalam sidebar */
+    .aesthetic-clock {
+        font-size: 12px !important;
+        padding: 4px 10px !important;
+    }
+
+    /* ── CONTENT LEFT ── */
+    .content-left { order: 1; width: 100%; }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+        font-size: 15px !important;
+        margin-top: 20px !important;
+        margin-bottom: 16px !important;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .aesthetic-date {
+        font-size: 0.55em !important;
+        padding: 4px 10px !important;
+    }
+
+    /* ── SEARCH FILTER ── */
+    .search-filter-wrapper {
+        padding: 12px !important;
+        gap: 10px !important;
+    }
+
+    .search-box input {
+        font-size: 15px !important; /* prevent iOS zoom */
+        padding: 11px 11px 11px 42px !important;
+    }
+
+    /* Filter pills — boleh scroll horizontal kalau ramai */
+    .filter-pills {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        gap: 6px !important;
+        padding-bottom: 2px !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+    .filter-pills::-webkit-scrollbar { display: none; }
+
+    .pill {
+        white-space: nowrap !important;
+        font-size: 12px !important;
+        padding: 7px 14px !important;
+        flex-shrink: 0 !important;
+    }
+
+    /* ── BOOKING CARD — override inline style ── */
+    /* HTML guna: display:flex; justify-content:space-between; align-items:center */
+    /* Mobile: kena susun menegak */
+    .booking-card {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        padding: 14px 16px !important;
+        border-radius: 14px !important;
+        margin-bottom: 12px !important;
+        gap: 8px !important;
+    }
+
+    /* Time column — dalam HTML ada div dengan width:140px */
+    .booking-card > div:first-child {
+        width: 100% !important;
+        padding-bottom: 8px !important;
+        border-bottom: 1px solid rgba(0,0,0,0.06) !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    /* Middle info column */
+    .booking-card > div:nth-child(2) {
+        padding: 0 !important;
+        width: 100% !important;
+    }
+
+    /* Room name + purpose badge */
+    .booking-card > div:nth-child(2) > div:first-child {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+    }
+
+    /* Nama bilik font size */
+    .booking-card > div:nth-child(2) span[style*="font-size: 16px"] {
+        font-size: 15px !important;
+    }
+
+    /* Teacher + subject text */
+    .booking-card > div:nth-child(2) > div:last-child {
+        font-size: 12px !important;
+        margin-top: 4px !important;
+    }
+
+    /* Btn group edit/delete — bawah sekali, full row */
+    .booking-card .btn-group {
+        width: 100% !important;
+        justify-content: flex-end !important;
+        padding-top: 6px !important;
+        border-top: 1px solid rgba(0,0,0,0.05) !important;
+    }
+
+    .btn-group .btn-action {
+        padding: 9px 14px !important;
+        font-size: 13px !important;
+        border-radius: 9px !important;
+    }
+
+    /* Past divider */
+    .past-divider { margin: 14px 0 10px !important; }
+
+    /* ── MODAL — bottom sheet ── */
+    .modal-overlay {
+        padding: 0 !important;
+        align-items: flex-end !important;
+    }
+
+    .modal-content {
+        max-width: 100% !important;
+        width: 100% !important;
+        border-radius: 22px 22px 0 0 !important;
+        padding: 8px 20px 38px !important;
+        animation: slideUpModal 0.3s cubic-bezier(0.34, 1.3, 0.64, 1) forwards;
+        max-height: 92dvh;
+        overflow-y: auto;
+    }
+
+    @keyframes slideUpModal {
+        from { transform: translateY(80px); opacity: 0; }
+        to   { transform: translateY(0);    opacity: 1; }
+    }
+
+    /* Pull bar */
+    .modal-content::before {
+        content: '';
+        display: block;
+        width: 36px;
+        height: 4px;
+        background: #e2e8f0;
+        border-radius: 4px;
+        margin: 10px auto 16px;
+    }
+
+    .modal-header h2 { font-size: 18px !important; }
+    .modal-header p  { font-size: 12px !important; }
+
+    /* Form row — single column */
+    .form-row { grid-template-columns: 1fr !important; gap: 0 !important; }
+
+    /* Prevent iOS zoom */
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 16px !important;
+        padding: 13px 12px !important;
+    }
+
+    /* Modal footer — stack */
+    .modal-footer {
+        flex-direction: column-reverse !important;
+        gap: 8px !important;
+        margin-top: 20px !important;
+    }
+
+    .btn-save, .btn-secondary {
+        width: 100% !important;
+        padding: 14px !important;
+        text-align: center;
+        font-size: 15px !important;
+        border-radius: 12px !important;
+    }
+
+    /* Safe area iPhone notch */
+    body { padding-bottom: env(safe-area-inset-bottom, 16px); }
+
+    .modal-content .modal-header {
+        position: sticky !important;
+        top: 0 !important;
+        background: white !important;
+        z-index: 10 !important;
+        padding-top: 12px !important;
+        padding-bottom: 14px !important;
+        margin-bottom: 8px !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+}
+
+/* ── Telefon sangat kecil < 420px ── */
+@media (max-width: 420px) {
+
+    .hero { padding: 12px 12px 12px; }
+    .hero h1 { font-size: 13px !important; }
+
+    .main-layout { padding: 10px !important; gap: 10px !important; }
+
+    .sidebar-right { padding: 13px 14px !important; }
+    .side-room-item { min-width: 82px !important; font-size: 11px !important; padding: 8px 10px !important; }
+
+    .booking-card { padding: 12px 13px !important; }
+
+    .modal-content { padding: 6px 14px 32px !important; }
+
+    .btn-primary, .date-input { font-size: 13px; }
+}
