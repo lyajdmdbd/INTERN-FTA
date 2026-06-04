@@ -1280,58 +1280,14 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 
 /* ── Responsive: sidebar jadi bar atas pada skrin kecil ── */
 @media (max-width: 900px) {
-  .sb-outer-wrap {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .sb-panel {
+  .dashboard-layout { flex-direction: column; }
+  .dashboard-side {
     width: 100%;
     position: static;
     flex-direction: row;
-    flex-wrap: wrap;
-    padding: 12px;
-    gap: 10px;
-    border-radius: 12px;
   }
-
-  .sb-section-title {
-    width: 100%;
-    margin: 0;
-  }
-
-  .sb-pill-list {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 0;
-  }
-
-  .sb-pill {
-    width: auto;
-    padding: 6px 12px;
-  }
-
-  .sb-divider {
-    width: 100%;
-    height: 0.5px;
-  }
-
-  .sb-stat-list {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 10px;
-    width: 100%;
-  }
-
-  .sb-stat-row {
-    flex: 1;
-    min-width: 100px;
-  }
-
-  .sb-main-content {
-    padding-left: 0;
-  }
+  .dashboard-side .cc-clock,
+  .dashboard-side .cc-cal { flex: 1; }
 }
 
 /* ============================================================
@@ -1341,24 +1297,22 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 /* ── TABLET (≤ 1024px) ───────────────────────────────────── */
 @media (max-width: 1024px) {
 
-  /* Sidebar jadi lebih kecil */
   .sb-panel {
-    width: 220px;
-    min-width: 200px;
+    width: 200px;
+    min-width: 180px;   
     padding: 14px 10px;
   }
 
-  /* Panel kanan dashboard lebih kecil */
   .dashboard-side {
-    width: 320px;
+    width: 300px;       
   }
 
-  /* Navbar logo kecilkan */
   .navbar img {
     height: 80px !important;
     margin-right: 0 !important;
   }
 }
+
 
 /* ── MOBILE BESAR (≤ 768px) ─────────────────────────────── */
 @media (max-width: 768px) {
@@ -1376,8 +1330,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
     position: static !important;
   }
 
-  /* Tajuk tengah navbar */
-  .navbar > div[style*="position:absolute"] ,
+  .navbar > div[style*="position:absolute"],
   .navbar > div[style*="position: absolute"] {
     position: static !important;
     transform: none !important;
@@ -1389,7 +1342,6 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   .navbar-title span { font-size: 13px !important; }
   .navbar-sub { font-size: 11px !important; }
 
-  /* Butang KEMBALI */
   .navbar > button {
     margin-left: 0 !important;
     padding: 6px 12px !important;
@@ -1398,18 +1350,18 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 
   /* ── CONTAINER ── */
   .container {
-    padding: 1rem 0.75rem 5rem; /* bawah lebih untuk bottom nav */
+    padding: 1rem 0.75rem 5rem;
   }
 
-  /* ── SIDEBAR + KANDUNGAN: susun atas-bawah ── */
+  /* ── SIDEBAR ── */
   .sb-outer-wrap {
     flex-direction: column;
-    gap: 10px;
+    gap: 0px;
   }
 
   .sb-panel {
     width: 100%;
-    min-width: unset;
+    min-width: unset;   
     position: static;
     margin-right: 0;
     padding: 12px;
@@ -1435,7 +1387,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
     border-radius: 20px;
   }
 
-  .sb-pill-name { font-size: 12px; }
+  .sb-pill-name  { font-size: 12px; }
   .sb-pill-count { font-size: 11px; padding: 1px 6px; }
 
   .sb-divider { width: 100%; }
@@ -1447,26 +1399,39 @@ textarea.form-control { resize: vertical; min-height: 90px; }
     width: 100%;
   }
 
-  .sb-stat-row { flex: 1; min-width: 80px; }
-  .sb-stat-name, .sb-stat-num { font-size: 12px; }
+  .sb-stat-row   { flex: 1; min-width: 80px; }
+  .sb-stat-name,
+  .sb-stat-num   { font-size: 12px; }
 
-  .sb-main-content { padding-left: 0; }
+  /* ── KANDUNGAN UTAMA── */
+  .sb-main-content {
+    padding-left: 0;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;   
+  }
 
   /* ── DASHBOARD LAYOUT ── */
   .dashboard-layout {
     flex-direction: column;
     gap: 14px;
+    width: 100%;        
+    min-width: 0;       
+  }
+
+  .dashboard-main {
+    width: 100%;        
+    min-width: 0;       
   }
 
   .dashboard-side {
     width: 100%;
     position: static;
-    flex-direction: column; 
+    flex-direction: column;
     gap: 10px;
-    order: -1;  
+    order: -1;
   }
 
-  /* side-row (jam + status slot) jadi column */
   .side-row {
     flex-direction: column;
     gap: 10px;
@@ -1482,7 +1447,7 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   /* ── STATS BAR ── */
   .stats-bar {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr)); 
     gap: 8px;
   }
 
@@ -1496,14 +1461,8 @@ textarea.form-control { resize: vertical; min-height: 90px; }
     border-radius: 12px;
   }
 
-  .stat-chip svg {
-    width: 28px;
-    height: 28px;
-  }
-
-  .stat-chip strong {
-    font-size: 20px;
-  }
+  .stat-chip svg    { width: 28px; height: 28px; }
+  .stat-chip strong { font-size: 20px; }
 
   /* ── TOOLBAR ── */
   .toolbar {
@@ -1523,7 +1482,6 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 
   .view-toggle { justify-content: flex-start; }
 
-  /* Butang tambah tempahan: penuh lebar */
   .btn-primary {
     width: 100%;
     justify-content: center;
@@ -1536,10 +1494,10 @@ textarea.form-control { resize: vertical; min-height: 90px; }
     gap: 8px;
   }
 
-  .card-name { font-size: 13px; }
-  .card-meta { gap: 6px; }
-  .meta-item { font-size: 11px; }
-  .card-tujuan { font-size: 11px; }
+  .card-name    { font-size: 13px; }
+  .card-meta    { gap: 6px; }
+  .meta-item    { font-size: 11px; }
+  .card-tujuan  { font-size: 11px; }
 
   .card-actions {
     width: 100%;
@@ -1548,26 +1506,23 @@ textarea.form-control { resize: vertical; min-height: 90px; }
     justify-content: flex-end;
   }
 
-  /* Grid view: 1 kolum je di mobile */
   .grid-3 { grid-template-columns: 1fr; }
   .grid-2 { grid-template-columns: 1fr; }
 
-  /* ── JAM ── */
-  .cc-time { font-size: 26px; letter-spacing: 2px; }
-  .cc-date { font-size: 12px; }
-
-  /* ── KALENDAR ── */
-  .cc-cal-grid { padding: 12px; gap: 2px; }
-  .cc-cal-num  { font-size: 12px; padding: 4px 1px; }
+  /* ── JAM & KALENDAR ── */
+  .cc-time      { font-size: 26px; letter-spacing: 2px; }
+  .cc-date      { font-size: 12px; }
+  .cc-cal-grid  { padding: 12px; gap: 2px; }
+  .cc-cal-num   { font-size: 12px; padding: 4px 1px; }
   .cc-day-label { font-size: 11px; }
 
   /* ── FORM ── */
-  .form-card { padding: 1.25rem; border-radius: 14px; }
-  .form-row  { grid-template-columns: 1fr; }
+  .form-card    { padding: 1.25rem; border-radius: 14px; }
+  .form-row     { grid-template-columns: 1fr; }
 
-  .device-selector { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .device-selector    { grid-template-columns: repeat(3, 1fr); gap: 8px; }
   .device-option-inner { padding: 10px 6px; gap: 4px; }
-  .device-option-icon { width: 36px; height: 36px; }
+  .device-option-icon  { width: 36px; height: 36px; }
   .device-option-label { font-size: 11px; }
 
   .form-header h2 { font-size: 16px; margin-right: 0; }
@@ -1576,25 +1531,96 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   .modal-box { max-width: 95%; padding: 1.25rem; }
 }
 
+
 /* ── MOBILE KECIL (≤ 480px) ─────────────────────────────── */
 @media (max-width: 480px) {
 
-  /* Stats: 1 baris 3 kolum kecil */
-  .stats-bar { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-  .stat-chip { padding: 8px 8px; }
+  .stats-bar {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* ← minmax(0) elak overflow */
+    gap: 6px;
+  }
+
+  .stat-chip        { padding: 8px 8px; }
   .stat-chip strong { font-size: 18px; }
-  .stat-chip svg { width: 24px; height: 24px; }
+  .stat-chip svg    { width: 24px; height: 24px; }
 
   .navbar-title span { font-size: 11px !important; }
-  .navbar-sub { font-size: 10px !important; }
+  .navbar-sub        { font-size: 10px !important; }
 
-  /* Device selector: 1 kolum */
   .device-selector { grid-template-columns: 1fr; }
 
   .cc-time { font-size: 22px; }
 
-  /* Toast lebih kecil */
   #toast-container { right: 0.5rem; left: 0.5rem; max-width: unset; }
+}
+
+/* =================== butang toggle pada desktop ==================================*/
+.sb-toggle-btn { display: none; }
+
+@media (max-width: 768px) {
+  .sb-toggle-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(10,15,25,0.85);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    color: rgba(255,255,255,0.85);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 0;
+  }
+
+  .sb-toggle-btn.active {
+    border-radius: 12px 12px 0 0;
+  }
+
+  .sb-toggle-hint {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 400;
+  }
+
+  .sb-toggle-arrow {
+    transition: transform 0.3s ease;
+    color: rgba(255,255,255,0.5);
+  }
+
+  .sb-toggle-arrow.open {
+    transform: rotate(180deg);
+  }
+
+  /* Sidebar tersembunyi by default */
+  .sb-panel {
+    display: none !important;
+    width: 100% !important;
+    min-width: unset !important;
+    position: static !important;
+    margin-right: 0 !important;
+    flex-direction: column !important;
+    border-radius: 0 0 12px 12px !important;
+  }
+
+  /* Tunjuk bila toggle dibuka */
+  .sb-panel.sb-open {
+    display: flex !important;
+  }
+
+  .sb-panel.sb-open .sb-pill-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .sb-panel.sb-open .sb-stat-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .sb-stat-row { flex: 1; min-width: 80px; }
 }
 
 /* ── BOTTOM NAVIGATION BAR───────────────── */
