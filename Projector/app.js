@@ -813,3 +813,10 @@ function sbSetStat(device, count, total) {
   }, 100);
 })();
 
+function toggleSidebar() {
+  const panel = document.getElementById('sbPanel');
+  const arrow = document.getElementById('sbArrow');
+  panel.classList.toggle('sb-open');
+  arrow.classList.toggle('open');
+}
+
