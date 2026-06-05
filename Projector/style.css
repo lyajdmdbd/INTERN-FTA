@@ -1727,3 +1727,26 @@ textarea.form-control { resize: vertical; min-height: 90px; }
   margin: 0 !important;
   max-width: 100% !important;
 }
+
+/* ==========bahagian footer==================== */
+.footer-wrapper {
+  position: fixed;        
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 0.75rem 2rem;
+  background: rgba(0, 0, 0, 0); 
+  text-align: center;               
+  z-index: 999;
+}
+
+.footer-text {
+  font-size: 13px;
+  color: #a9a8a8;
+  margin: 0;
+}
+
+.footer-brand {
+  font-weight: 600;
+  color: #ffffff;
+}
