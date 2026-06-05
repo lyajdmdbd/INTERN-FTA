@@ -300,8 +300,8 @@ a { text-decoration: none; color: inherit; }
 }
 .btn-danger:hover { background: var(--red-light); color: var(--red); border-color: var(--red-mid); }
 
-.btn-secondary { background:rgba(255, 255, 255, 0.958); color: rgb(0, 0, 0); border: 1px solid rgb(110, 108, 108); }
-.btn-secondary:hover { background: rgba(199, 199, 199, 0.573); }
+.btn-secondary { background:rgba(0, 0, 0, 0.958); color: rgb(255, 252, 252); border: 1px solid rgb(255, 255, 255); }
+.btn-secondary:hover { background: rgba(71, 148, 235, 0.464); }
 
 .btn-submit {
   width: 100%;
@@ -496,7 +496,7 @@ a { text-decoration: none; color: inherit; }
 text-shadow: 0 0 6px #f5a623, 0 0 12px #f5a623;
   flex: 1;           
   text-align: center; 
-  margin-right: 60px;
+  margin-right: 100px;
 
 }
 
@@ -1730,14 +1730,9 @@ textarea.form-control { resize: vertical; min-height: 90px; }
 
 /* ==========bahagian footer==================== */
 .footer-wrapper {
-  position: fixed;        
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 0.75rem 2rem;
-  background: rgba(0, 0, 0, 0); 
-  text-align: center;               
-  z-index: 999;
+     text-align: center;
+    padding: 20px 0;
+    margin-top: 20px;
 }
 
 .footer-text {
